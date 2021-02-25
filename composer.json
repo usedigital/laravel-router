@@ -1,0 +1,32 @@
+{
+    "name": "usedigital/laravel-router",
+    "description": "Controller phpDOC Laravel Route Generator",
+    "type": "library",
+    "require": {
+        "php": ">=7",
+        "laravel/framework": ">=5.8",
+        "barryvdh/reflection-docblock": "^2.0.6"
+    },
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Renalcio Carlos",
+            "email": "carlos@usedigital.com.br",
+            "homepage": "http://usedigital.com.br",
+            "role": "Co-founder & Developer"
+        }
+    ],
+    "minimum-stability": "dev-master",
+    "extra": {
+        "laravel": {
+            "providers": [
+                "UseDigital\\LaravelRouter\\RouterServiceProvider"
+            ]
+        }
+    },
+    "autoload": {
+        "psr-4": {
+            "UseDigital\\LaravelRouter\\": "src"
+        }
+    }
+}
