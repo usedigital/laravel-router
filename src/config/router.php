@@ -63,7 +63,8 @@ return [
         "middleware"    => collect(["middleware", "mw"]),
         "method"        => collect(["method", "mt"]),
         "as"            => collect(["as"]),
-        "url"        => collect(["action", "url", "name", "a", "n", "u"]),
+        "url"        => collect(["url","u"]),
+        "name"        => collect(["action", "name", "a", "n"]),
         "prefix"        => collect(["prefix", "pre", "p"]),
         "domain"     => collect(["subdomain", "sd", "domain", "d"]),
         "namespace" => collect(["namespace", "ns"])

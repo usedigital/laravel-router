@@ -270,12 +270,13 @@ class RouterCommand extends Command
                     }
 
                     //Definir parametros não definidos no phpDOC
-                    if(!$group_add->prefix && !isset($class_phpdoc_params["prefix"])){
+                    //dump($controller_class,$class_phpdoc_params, isset($class_phpdoc_params["prefix"]));
+                    if(!isset($class_phpdoc_params["prefix"])){
                         //Criar prefixo baseado no nome da Classe
                         $group_add->prefix = Str::lower($controller_class);
                         $group_add->prefix = str_replace("controller", "", $group_add->prefix);
                     }
-                    if(!$group_add->as && !isset($class_phpdoc_params["as"])){
+                    if(!isset($class_phpdoc_params["as"])){
                         //Criar prefixo baseado no nome da Classe
                         $group_add->as = config("router.force_lowercase") ? Str::lower($controller_class) : $controller_class;
                         $group_add->as = str_replace("controller", "", $group_add->as) . ".";
@@ -316,29 +317,37 @@ class RouterCommand extends Command
                                 $route_add->middleware = config("router.defaults.middleware.".($api ? "api" : "web"));
                             }*/
 
-                            $method_url = $route_add->url ?? ($method == "index" ? "/" : $method);
+                            if(!isset($method_phpdoc_params['url'])) {
 
-                            //Parametros da URL
-                            $method_reflection = new ReflectionMethod($classe, $method);
-                            $method_reflection_params = $method_reflection->getParameters();
+                                $method_url = $route_add->prefix ? "{$route_add->prefix}/" : '';
 
-                            if($method_reflection_params && is_array($method_reflection_params)){
+                                $method_url .= $route_add->name ?? ($method == "index" ? "/" : $method);
 
-                                foreach($method_reflection_params as $param){
+                                //Parametros da URL
+                                $method_reflection = new ReflectionMethod($classe, $method);
+                                $method_reflection_params = $method_reflection->getParameters();
 
-                                    $param_class = $param->getClass();
-                                    if(!$param_class || !Str::contains($param_class, "Request")) {
-                                        $method_url .= "/{".$param->name;
-                                        $method_url .= ($param->isOptional()) ? "?}" : "}";
+
+                                if ($method_reflection_params && is_array($method_reflection_params)) {
+
+                                    foreach ($method_reflection_params as $param) {
+
+                                        $param_class = $param->getClass();
+                                        if (!$param_class || !Str::contains($param_class, "Request")) {
+                                            $method_url .= "/{" . $param->name;
+                                            $method_url .= ($param->isOptional()) ? "?}" : "}";
+                                        }
+
                                     }
 
                                 }
 
+                                //dd($method_url);
+
+                                $route_add->url = $method_url;
+                            }else{
+                                $route_add->url =  $method_phpdoc_params['url'];
                             }
-
-                            $route_add->url = $method_url;
-
-
 
                             $group_add->itens->add($route_add);
                         }

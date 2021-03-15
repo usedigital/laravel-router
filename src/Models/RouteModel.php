@@ -7,10 +7,21 @@ namespace UseDigital\LaravelRouter\Models;
 use Illuminate\Support\Str;
 use UseDigital\LaravelRouter\Utils\RouterHelpers;
 
+/**
+ * Class RouteModel
+ *
+ * @property string $name
+ * @property string $url
+ * @property string $method
+ * @property string $uses
+ * @property string $as
+ * @property string $middleware
+ */
 class RouteModel
 {
     private $method;
     private $url;
+    private $name;
 
     private $properties = ["uses", "as", "middleware"];
 
