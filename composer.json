@@ -16,12 +16,14 @@
             "role": "Co-founder & Developer"
         }
     ],
-    "minimum-stability": "dev-master",
     "extra": {
         "laravel": {
             "providers": [
                 "UseDigital\\LaravelRouter\\RouterServiceProvider"
             ]
+        },
+        "branch-alias": {
+            "dev-master": "master"
         }
     },
     "autoload": {
