@@ -203,6 +203,7 @@ class RouterCommand extends Command
 
         $this->line("");
         $this->call("route:clear");
+        $this->call("cache:clear");
 
         $this->info("Rotas Geradas com sucesso!");
     }
@@ -236,7 +237,7 @@ class RouterCommand extends Command
 
         $controllers_path = app_path("Http".DIRECTORY_SEPARATOR."Controllers");
 
-        $path_final = $controllers_path . (($path) ? $path : "") . DIRECTORY_SEPARATOR;
+        $path_final = $controllers_path . ($path ?: "") . DIRECTORY_SEPARATOR;
 
         $retorno = collect();
 
@@ -332,7 +333,7 @@ class RouterCommand extends Command
 
                                     foreach ($method_reflection_params as $param) {
 
-                                        $param_class = $param->getClass();
+                                        $param_class = $param->getType();
                                         if (!$param_class || !Str::contains($param_class, "Request")) {
                                             $method_url .= "/{" . $param->name;
                                             $method_url .= ($param->isOptional()) ? "?}" : "}";
@@ -369,7 +370,7 @@ class RouterCommand extends Command
                 $group_add = new RouteGroupModel();
                 $group_add->title = ($path ? $path.DIRECTORY_SEPARATOR : "").$dir;
 
-                $path_collection = collect(explode("/",$path));
+                $path_collection = collect(explode("/", $group_add->title));
 
 
                 $group_add->prefix = Str::lower($dir);
@@ -378,8 +379,10 @@ class RouterCommand extends Command
 
                 //Verifica se existem opções definidas no config.directories
 
-                if(config("router.directories")->has($group_add->title)){
-                    foreach(config("router.directories")->get($group_add->title) as $attribute => $value){
+                $dir_config_name = $path_collection->filter()->implode('/');
+                if(config("router.directories")->has($dir_config_name)){
+
+                    foreach(config("router.directories")->get($dir_config_name) as $attribute => $value){
                         $group_add->$attribute = $value;
                     }
                 }
